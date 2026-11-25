@@ -1,0 +1,180 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "49ae38eada468bccfcd1",
+  "position": {
+    "x": 0,
+    "y": 527.35009671179876,
+    "z": 1000,
+    "height": 471.64410058027079,
+    "width": 1355.5125725338492,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Calendar"
+                    }
+                  },
+                  "Property": "Year"
+                }
+              },
+              "queryRef": "Calendar.Year",
+              "nativeQueryRef": "Year",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Calendar"
+                    }
+                  },
+                  "Property": "Month Name"
+                }
+              },
+              "queryRef": "Calendar.Month Name",
+              "nativeQueryRef": "Month Name",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales Measures"
+                    }
+                  },
+                  "Property": "Total Sales Plan"
+                }
+              },
+              "queryRef": "Sales Measures.Total Sales Plan",
+              "nativeQueryRef": "Total Sales Plan"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales Measures"
+                    }
+                  },
+                  "Property": "Previous Sales Plan"
+                }
+              },
+              "queryRef": "Sales Measures.Previous Sales Plan",
+              "nativeQueryRef": "Previous Sales Plan"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales Measures"
+                    }
+                  },
+                  "Property": "YTD Sales Plan"
+                }
+              },
+              "queryRef": "Sales Measures.YTD Sales Plan",
+              "nativeQueryRef": "YTD Sales Plan"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales Measures"
+                    }
+                  },
+                  "Property": "Sales Plan SPLY"
+                }
+              },
+              "queryRef": "Sales Measures.Sales Plan SPLY",
+              "nativeQueryRef": "Sales Plan SPLY"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales Measures"
+                    }
+                  },
+                  "Property": "YoY Growth % in Sales Plan"
+                }
+              },
+              "queryRef": "Sales Measures.YoY Growth % in Sales Plan",
+              "nativeQueryRef": "YoY Growth % in Sales Plan"
+            }
+          ]
+        }
+      }
+    },
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "Calendar.Year"
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "Calendar.Month Name"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          }
+        ],
+        "root": {}
+      }
+    ],
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Sales Plan — Time Intelligence.'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'''Segoe UI Bold'', wf_segoe-ui_bold, helvetica, arial, sans-serif'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

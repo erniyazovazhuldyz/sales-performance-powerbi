@@ -1,0 +1,116 @@
+table Product
+	lineageTag: 5aa3db9f-a586-4f36-a38e-34cc824dbdd4
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: d1fd7098-2aa9-46fa-aa61-e6f3d4c50c87
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SKU
+		dataType: string
+		lineageTag: 81a135fd-d3b9-4f81-956c-b65cae389ae7
+		summarizeBy: none
+		sourceColumn: SKU
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		lineageTag: 0e0618e4-0364-478c-a36c-66b9354449d1
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Standard Cost'
+		dataType: double
+		lineageTag: 8d83ddad-af2b-4458-be33-b7f2ae1b758b
+		summarizeBy: sum
+		sourceColumn: Standard Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Color
+		dataType: string
+		lineageTag: 7903a775-4adf-4c37-adc9-b73770070f89
+		summarizeBy: none
+		sourceColumn: Color
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'List Price'
+		dataType: double
+		lineageTag: 17eafa80-cb55-44bf-ba6c-8e85b637444a
+		summarizeBy: sum
+		sourceColumn: List Price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Model
+		dataType: string
+		lineageTag: 0d14e1d1-02d2-45ab-b9e8-d29a3e79e2e5
+		summarizeBy: none
+		sourceColumn: Model
+
+		annotation SummarizationSetBy = Automatic
+
+	column Subcategory
+		dataType: string
+		lineageTag: 20907000-5b13-43cd-8d2b-c78ce1290faf
+		summarizeBy: none
+		sourceColumn: Subcategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 1bffe2c0-3543-4a57-be13-ed0f2b2f2c6a
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unit Margin %' = DIVIDE(Product[List Price] - Product[Standard Cost], Product[List Price])
+		lineageTag: 594b5208-7df6-4668-8331-686d25a9b1f6
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Margin Level' =
+			
+			SWITCH(
+			    TRUE(),
+			    Product[Unit Margin %] < 0.4, "Low",
+			    Product[Unit Margin %] < 0.5, "Medium",
+			    "High"
+			)
+		lineageTag: 6f675b4d-f03b-4859-8d1c-ef9fcfb53367
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Product = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Жулдыз\Desktop\PowerBI\Product_data.xlsx"), null, true),
+				    Product_data_Sheet = Source{[Item="Product_data",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Product_data_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"ProductKey", Int64.Type}, {"SKU", type text}, {"Product", type text}, {"Standard Cost", type number}, {"Color", type text}, {"List Price", type number}, {"Model", type text}, {"Subcategory", type text}, {"Category", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

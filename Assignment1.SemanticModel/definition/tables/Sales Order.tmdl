@@ -1,0 +1,51 @@
+table 'Sales Order'
+	lineageTag: df9b9f00-c175-45f6-8306-a0037437f7dc
+
+	column Channel
+		dataType: string
+		lineageTag: 65737bf0-e7c6-4381-88d3-dcd0b6586e47
+		summarizeBy: none
+		sourceColumn: Channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesOrderLineKey
+		dataType: int64
+		formatString: 0
+		lineageTag: c86c097e-6e61-468e-a76a-08838bc3f8a4
+		summarizeBy: none
+		sourceColumn: SalesOrderLineKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sales Order'
+		dataType: string
+		lineageTag: 8966bac3-aefa-46cb-97a2-c2c04455cb84
+		summarizeBy: none
+		sourceColumn: Sales Order
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sales Order Line'
+		dataType: string
+		lineageTag: 3f2dc88c-0026-4498-b99a-cc4a7bcafc57
+		summarizeBy: none
+		sourceColumn: Sales Order Line
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Sales Order' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Жулдыз\Desktop\PowerBI\AdventureWorksSales.xlsx"), null, true),
+				    #"Sales Order_data_Sheet" = Source{[Item="Sales Order_data",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Sales Order_data_Sheet", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Channel", type text}, {"SalesOrderLineKey", Int64.Type}, {"Sales Order", type text}, {"Sales Order Line", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "bade5df9f8eab261d588",
+  "position": {
+    "x": 1357.3694390715666,
+    "y": 713.036750483559,
+    "z": 11000,
+    "height": 367.65957446808511,
+    "width": 462.35976789168274,
+    "tabOrder": 11000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Territory"
+                    }
+                  },
+                  "Property": "Region"
+                }
+              },
+              "queryRef": "Territory.Region",
+              "nativeQueryRef": "Region"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales Measures"
+                    }
+                  },
+                  "Property": "Profit Margin % (/)"
+                }
+              },
+              "queryRef": "Sales.Profit Margin % (/)",
+              "nativeQueryRef": "Profit Margin % (/)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales Measures"
+                    }
+                  },
+                  "Property": "Profit Margin % (DIVIDE)"
+                }
+              },
+              "queryRef": "Sales.Profit Margin % (DIVIDE)",
+              "nativeQueryRef": "Profit Margin % (DIVIDE)"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "stylePreset": [
+        {
+          "properties": {
+            "name": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Default'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

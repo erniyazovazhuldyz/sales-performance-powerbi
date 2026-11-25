@@ -1,0 +1,166 @@
+table Customer
+	lineageTag: e2b135c2-86a2-42cc-b1f1-7dc37ad7b0bc
+
+	measure 'Gold Income' =
+			
+			CALCULATE (
+			    SUM ( Customer[Income] ),
+			    Customer[Membership] = "Gold",
+			    Customer[Age Group] IN { "Under 35", "35-44" }
+			)
+		lineageTag: 252b457f-af4d-4508-89b1-59b3c71712f0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CustomerKey
+		dataType: double
+		formatString: 0
+		lineageTag: cacaed68-f26b-4bfa-b61f-7903fd07e2d3
+		summarizeBy: none
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Customer
+		dataType: string
+		lineageTag: 4965b269-a02b-49e6-a8a1-80423b48a5f9
+		summarizeBy: none
+		sourceColumn: Customer
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 0fbcefda-8b0f-4b3c-b625-72763fbf2d6f
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column State-Province
+		dataType: string
+		lineageTag: bb6209a0-7266-494d-b615-c95d4b9ba48e
+		summarizeBy: none
+		sourceColumn: State-Province
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country-Region
+		dataType: string
+		lineageTag: 135f4ff8-12cf-4a45-92f4-2e760b4d5104
+		summarizeBy: none
+		sourceColumn: Country-Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Postal Code'
+		dataType: string
+		lineageTag: 6516af9a-698e-43f3-933b-8cfc2d63c0b2
+		summarizeBy: none
+		sourceColumn: Postal Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Occupancy
+		dataType: string
+		lineageTag: a8113976-100c-4c2b-9c6f-2c5b64a477fb
+		summarizeBy: none
+		sourceColumn: Occupancy
+
+		annotation SummarizationSetBy = Automatic
+
+	column Membership
+		dataType: string
+		lineageTag: 4033c360-915b-4dd5-a632-c1c13d9645e6
+		summarizeBy: none
+		sourceColumn: Membership
+
+		annotation SummarizationSetBy = Automatic
+
+	column Income
+		dataType: double
+		lineageTag: 797d63b9-aeff-4569-a06e-0e6788591abf
+		summarizeBy: none
+		sourceColumn: Income
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BirthYear
+		dataType: int64
+		formatString: 0
+		lineageTag: f5878de4-d0f5-415d-ac33-a4687ac3dbc0
+		summarizeBy: none
+		sourceColumn: BirthYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age = IF(ISBLANK(Customer[BirthYear]), BLANK(), YEAR(TODAY()) - Customer[BirthYear])
+		formatString: 0
+		lineageTag: ccd9f4b9-345a-4c6a-8123-0458e0234d7d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Age Group' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK(Customer[Age]), "Unknown",
+			    Customer[Age] < 35, "Under 35",
+			    Customer[Age] < 45, "35-44",
+			    Customer[Age] < 55, "45-54",
+			    Customer[Age] < 65, "55-64",
+			    "65+"
+			)
+		lineageTag: a650ff34-ac11-4442-b7ac-c9a0109586f1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Age Group Order' =
+			
+			SWITCH(
+			    Customer[Age Group],
+			    "Under 35", 1,
+			    "35-44", 2,
+			    "45-54", 3,
+			    "55-64", 4,
+			    "65+", 5,
+			    6
+			)
+		formatString: 0
+		lineageTag: 5ee77ab9-f2d6-4857-8c9a-e0570207e7ae
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Customer = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Жулдыз\Desktop\PowerBI\Customer_data.xlsx"), null, true),
+				    Customer_data_Sheet = Source{[Item="Customer_data",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Customer_data_Sheet,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}, {"Column4", type text}, {"Column5", type text}, {"Column6", type text}}),
+				    #"Removed Top Rows" = Table.Skip(#"Changed Type",1),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Removed Top Rows", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"CustomerKey2", type text}, {"Customer", type text}, {"City", type text}, {"State-Province", type text}, {"Country-Region", type text}, {"Postal Code", type text}}),
+				    #"Removed Top Rows1" = Table.Skip(#"Changed Type1",2),
+				    #"Filled Down" = Table.FillDown(#"Removed Top Rows1",{"Country-Region"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Filled Down",{{"CustomerKey2", "CustomerKey"}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Renamed Columns", {"CustomerKey"}),
+				    #"Removed Blank Rows" = Table.SelectRows(#"Removed Duplicates", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+				    #"Replaced Value" = Table.ReplaceValue(#"Removed Blank Rows","AW","",Replacer.ReplaceText,{"CustomerKey"}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Replaced Value",{{"CustomerKey", Int64.Type}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Changed Type2", {"CustomerKey"}, #"New Customer", {"CustomerKey"}, "New Customer", JoinKind.LeftOuter),
+				    #"Expanded New Customer" = Table.ExpandTableColumn(#"Merged Queries", "New Customer", {"Occupancy", "Membership", "Income", "BirthYear"}, {"Occupancy", "Membership", "Income", "BirthYear"}),
+				    #"Changed Type3" = Table.TransformColumnTypes(#"Expanded New Customer",{{"BirthYear", Int64.Type}}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Changed Type3",null,-1,Replacer.ReplaceValue,{"CustomerKey"})
+				in
+				    #"Replaced Value1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

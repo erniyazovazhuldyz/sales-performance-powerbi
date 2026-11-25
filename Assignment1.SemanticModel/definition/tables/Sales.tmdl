@@ -1,0 +1,146 @@
+table Sales
+	lineageTag: aeb6fb45-ed19-4852-a8b2-14a027f7827d
+
+	column SalesOrderLineKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 9be27ebe-72d2-42e9-b1c0-5570d4da427c
+		summarizeBy: none
+		sourceColumn: SalesOrderLineKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ResellerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f7189bd-f1fc-47d7-9713-7b9f98ec0e9f
+		summarizeBy: none
+		sourceColumn: ResellerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 9ae90efb-fde5-4098-90f5-38d17b9fce6f
+		summarizeBy: none
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 8aa8d3a8-2ad0-408b-9130-e39a2475ac7d
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 4008c023-b475-4b34-a41e-418e047d09f6
+		summarizeBy: none
+		sourceColumn: OrderDateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DueDateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f2ffae9-9873-4c7c-9eee-9cf1dac38a7e
+		summarizeBy: count
+		sourceColumn: DueDateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShipDateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 84ba9bc4-3c02-4530-bc9f-fed351594d1a
+		summarizeBy: count
+		sourceColumn: ShipDateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesTerritoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 78fc37d2-788d-4d72-b6bf-c333b0896528
+		summarizeBy: none
+		sourceColumn: SalesTerritoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Quantity'
+		dataType: int64
+		formatString: 0
+		lineageTag: 744d5dc4-1d55-48b4-aea5-16082958a499
+		summarizeBy: sum
+		sourceColumn: Order Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unit Price'
+		dataType: string
+		lineageTag: be098825-d65a-4c3f-9587-4bd3b0d912ad
+		summarizeBy: none
+		sourceColumn: Unit Price
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Extended Amount'
+		dataType: double
+		lineageTag: ce10a430-ead6-4cb2-b683-a8b9f73c4ac2
+		summarizeBy: sum
+		sourceColumn: Extended Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Unit Price Discount Pct'
+		dataType: int64
+		formatString: 0
+		lineageTag: afd7dda6-01f9-45ce-94d8-9d44cdf4c5ed
+		summarizeBy: sum
+		sourceColumn: Unit Price Discount Pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Standard Cost'
+		dataType: double
+		lineageTag: 34aec383-54eb-4ad2-ae47-442b3cb9902e
+		summarizeBy: sum
+		sourceColumn: Product Standard Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total Product Cost'
+		dataType: double
+		lineageTag: 55e69641-f6d0-45cb-8a3a-f100f1f86b45
+		summarizeBy: sum
+		sourceColumn: Total Product Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Sales = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Жулдыз\Desktop\PowerBI\AdventureWorksSales.xlsx"), null, true),
+				    Sales_data_Sheet = Source{[Item="Sales_data",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Sales_data_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"SalesOrderLineKey", Int64.Type}, {"ResellerKey", Int64.Type}, {"CustomerKey", Int64.Type}, {"ProductKey", Int64.Type}, {"OrderDateKey", Int64.Type}, {"DueDateKey", Int64.Type}, {"ShipDateKey", Int64.Type}, {"SalesTerritoryKey", Int64.Type}, {"Order Quantity", Int64.Type}, {"Unit Price", type text}, {"Extended Amount", type number}, {"Unit Price Discount Pct", Int64.Type}, {"Product Standard Cost", type number}, {"Total Product Cost", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

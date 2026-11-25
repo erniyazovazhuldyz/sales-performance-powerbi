@@ -1,0 +1,46 @@
+table 'Sales Plan Final'
+	lineageTag: 99c96a0e-bb11-47d7-a667-a05742a1ebe7
+
+	column SalesTerritoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: b4b92d54-50f9-43f0-a7d6-0165b6fedd4c
+		summarizeBy: none
+		sourceColumn: SalesTerritoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e2c1e032-e98e-45e7-8cb3-146f8ca56c04
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Plan
+		dataType: double
+		lineageTag: 7277b13e-4966-484d-9c71-2e1e6e1ad7c9
+		summarizeBy: sum
+		sourceColumn: Plan
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Sales Plan Final' = m
+		mode: import
+		queryGroup: sales
+		source =
+				let
+				    Source = Table.Combine({SalesPlan, SalesPlanNew})
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

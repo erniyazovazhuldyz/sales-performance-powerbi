@@ -1,0 +1,191 @@
+table 'Sales Measures'
+	lineageTag: a2928e18-b332-400a-b38c-b108928939de
+
+	measure 'Average Sales Amount' = AVERAGE(Sales[Extended Amount])
+		lineageTag: bd59eb79-a24e-4b4a-b408-944bce5a3cb9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Number of Customers' = DISTINCTCOUNT(Sales[CustomerKey])
+		formatString: 0
+		lineageTag: 4d454764-a0ec-4f54-99b0-25b3b5de864b
+
+	measure Profit = [Total Sales Amount] - [Total Cost]
+		formatString: #,0.0\ "₸";-#,0.0\ "₸";#,0.0\ "₸"
+		lineageTag: 69df25cd-0bf2-4d4f-a899-85f32fcddb1d
+
+		annotation PBI_FormatHint = {"currencyCulture":"kk-KZ"}
+
+	measure 'Number of Orders' = DISTINCTCOUNT('Sales Order'[Sales Order])
+		formatString: 0
+		lineageTag: 28a9e582-bf90-4162-a2da-2b8253a232b4
+
+	measure 'Profit Margin % (/)' = [Profit] / [Total Sales Amount]
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: ce542235-5aa9-45b6-9315-54eadd8b8fdf
+
+	measure 'Profit Margin % (DIVIDE)' = DIVIDE([Profit], [Total Sales Amount])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 969575d5-2d10-4426-b0a7-9af0ed2a6d37
+
+	measure 'Sales Plan Achievement %' = DIVIDE([Total Sales Amount], [Total Sales Plan])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 6ccf94b6-30cd-4005-ac61-a08a2d35e3cb
+
+	measure 'Total Cost' = SUM(Sales[Total Product Cost])
+		lineageTag: f0c5f517-662c-465b-98ab-a22199b77b43
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Quantity Sold' = SUM(Sales[Order Quantity])
+		formatString: 0
+		lineageTag: a8a44373-d996-4320-8f8f-04b81bd8f5e5
+
+	measure 'Total Sales Amount' = SUM(Sales[Extended Amount])
+		formatString: #,0.0\ "₸";-#,0.0\ "₸";#,0.0\ "₸"
+		lineageTag: d4dd2617-a8c2-4c3a-93b2-c791bf88561b
+
+		annotation PBI_FormatHint = {"currencyCulture":"kk-KZ"}
+
+	measure 'Total Sales Plan' = SUM('Sales Plan Final'[Plan])
+		formatString: #,0.0\ "₸";-#,0.0\ "₸";#,0.0\ "₸"
+		lineageTag: 58081531-517f-4cc9-996f-afe2dbee122e
+
+		annotation PBI_FormatHint = {"currencyCulture":"kk-KZ"}
+
+	measure 'Sales YTD' = TOTALYTD([Total Sales Amount], 'Calendar'[Date])
+		formatString: #,0.0\ "₸";-#,0.0\ "₸";#,0.0\ "₸"
+		lineageTag: 67f85a78-ba4e-4d37-b364-201f96da1e40
+
+		annotation PBI_FormatHint = {"currencyCulture":"kk-KZ"}
+
+	measure 'Sales QTD' = TOTALQTD([Total Sales Amount], 'Calendar'[Date])
+		lineageTag: 9606fc9b-35ab-4a3c-ace5-7d28d9dbb33c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sales PY' = CALCULATE([Total Sales Amount], SAMEPERIODLASTYEAR('Calendar'[Date]))
+		formatString: #,0.0\ "₸";-#,0.0\ "₸";#,0.0\ "₸"
+		lineageTag: 35518d9f-fdcd-4c47-bf35-6e5df25cd0dd
+
+		annotation PBI_FormatHint = {"currencyCulture":"kk-KZ"}
+
+	measure 'YoY Growth %' = DIVIDE([Total Sales Amount] - [Sales PY], [Sales PY])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: f70f0f1a-5249-4592-aadf-88180c7fb568
+
+	measure 'Sales Previous Month' = CALCULATE([Total Sales Amount], PREVIOUSMONTH('Calendar'[Date]))
+		lineageTag: fccb6632-0dca-46cb-8602-4c1fbc5b55ba
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'MoM Growth %' =
+			
+			IF (
+			    HASONEVALUE ( 'Calendar'[Month Number] ),
+			    DIVIDE ( [Total Sales Amount] - [Sales Previous Month], [Sales Previous Month] )
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: ab2e5ede-cb51-4984-9658-72a1abe1966e
+
+	measure 'Sales YTD PY' = CALCULATE([Sales YTD], SAMEPERIODLASTYEAR('Calendar'[Date]))
+		lineageTag: d430ddd7-f64f-4af9-bf6c-88bee72e9663
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Previous Sales Plan' = CALCULATE([Total Sales Plan], PREVIOUSMONTH('Calendar'[Date]))
+		lineageTag: 55aaf1ba-73ae-4036-9563-0c833c241849
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YTD Sales Plan' = TOTALYTD([Total Sales Plan], 'Calendar'[Date])
+		formatString: #,0.0\ "₸";-#,0.0\ "₸";#,0.0\ "₸"
+		lineageTag: 318a0590-1359-44ca-b642-ea846d7ebf65
+
+		annotation PBI_FormatHint = {"currencyCulture":"kk-KZ"}
+
+	measure 'Sales Plan SPLY' = CALCULATE([Total Sales Plan], SAMEPERIODLASTYEAR('Calendar'[Date]))
+		lineageTag: 3b8c2605-fd71-48fa-8435-aa06efdd9091
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY Growth % in Sales Plan' = DIVIDE([Total Sales Plan] - [Sales Plan SPLY], [Sales Plan SPLY])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 010591dd-ea23-41a5-b907-efe2330d6182
+
+	measure 'Devices Revenue' = CALCULATE([Total Sales Amount], Product[Category] = "Devices")
+		lineageTag: 6c5e124d-f209-41d8-a9f4-dd18ad927d2f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Internet Revenue' = CALCULATE([Total Sales Amount], 'Sales Order'[Channel] = "Internet")
+		lineageTag: 73fb8132-c63d-45be-ae96-2bcfa2342080
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Internet Revenue 2019' = CALCULATE([Total Sales Amount], 'Sales Order'[Channel] = "Internet", 'Calendar'[Year] = 2019)
+		lineageTag: 47029f98-3799-4383-b21b-8ae5566c71ea
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% of Total Revenue' = ```
+			
+			   DIVIDE ( [Total Sales Amount],
+			            CALCULATE ( [Total Sales Amount], ALL ( Product[Category] ) ) )
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: e0ebdb8f-9ea6-4cc8-be79-73ad8a7e0f2e
+
+	measure '% of Category in Year' = DIVIDE([Total Sales Amount], CALCULATE([Total Sales Amount], ALL(Product[Category])))
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 49275631-78d5-4767-8e58-bb42e1e1524e
+
+	measure 'Category Rank' = IF(HASONEVALUE(Product[Category]), RANKX(ALL(Product[Category]), [Total Sales Amount], , DESC))
+		formatString: 0
+		lineageTag: 69b14b6d-132e-498f-a034-b0e9255918c9
+
+	measure 'Customer Count' = CALCULATE(COUNTROWS(Customer), Customer[CustomerKey] <> -1)
+		formatString: 0
+		lineageTag: f61d6607-a2d7-491d-8731-fd83b72202aa
+
+	measure '% of Customers' = DIVIDE([Customer Count], CALCULATE([Customer Count], ALL(Customer[Age Group])))
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: eee9996e-6ae7-4f04-8146-84a53e10b6ef
+
+	measure AOV = DIVIDE([Total Sales Amount], [Number of Orders])
+		formatString: #,0.0\ "₸";-#,0.0\ "₸";#,0.0\ "₸"
+		lineageTag: a44d4e58-757e-4e30-b79e-84717bb9386f
+
+		annotation PBI_FormatHint = {"currencyCulture":"kk-KZ"}
+
+	measure 'Revenue per Customer' =
+			
+			DIVIDE(
+			    CALCULATE([Total Sales Amount], Sales[CustomerKey] <> -1),
+			    CALCULATE([Number of Customers], Sales[CustomerKey] <> -1)
+			)
+		formatString: #,0.0\ "₸";-#,0.0\ "₸";#,0.0\ "₸"
+		lineageTag: aa009532-a9ee-4671-8a08-13ed92251087
+
+		annotation PBI_FormatHint = {"currencyCulture":"kk-KZ"}
+
+	measure ASP = DIVIDE([Total Sales Amount], [Total Quantity Sold])
+		formatString: #,0.0\ "₸";-#,0.0\ "₸";#,0.0\ "₸"
+		lineageTag: 82667ee3-2321-4942-8441-3d167fda2986
+
+		annotation PBI_FormatHint = {"currencyCulture":"kk-KZ"}
+
+	partition 'Sales Measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WMlSKjQUA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", Int64.Type}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

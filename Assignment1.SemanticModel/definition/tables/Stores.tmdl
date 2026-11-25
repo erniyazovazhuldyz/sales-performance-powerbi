@@ -1,0 +1,116 @@
+table Stores
+	lineageTag: edf8b115-814d-4750-a809-240f54a13cef
+
+	column 'Invoice #'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7344ae04-1900-4b08-b4b5-e531a9db4f29
+		summarizeBy: sum
+		sourceColumn: Invoice #
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: bc426dc6-3d9e-49b0-b540-271db6c5b0da
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Operation Type (purchase / relocation)'
+		dataType: string
+		lineageTag: e7492f3b-b1c2-4774-9950-cfcd2256dda6
+		summarizeBy: none
+		sourceColumn: Operation Type (purchase / relocation)
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 92b65994-3fdd-49fe-87c8-8f0396305c51
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cost Price'
+		dataType: int64
+		formatString: 0
+		lineageTag: 850b3876-2146-48c7-8520-18127f67d17e
+		summarizeBy: sum
+		sourceColumn: Cost Price
+
+		annotation SummarizationSetBy = Automatic
+
+	column Supplier
+		dataType: string
+		lineageTag: 2f45d0c5-c614-433c-b67e-afebce4871a5
+		summarizeBy: none
+		sourceColumn: Supplier
+
+		annotation SummarizationSetBy = Automatic
+
+	column Store
+		dataType: int64
+		formatString: 0
+		lineageTag: b28091ae-7d86-4578-bf1b-d13ef1bfbbef
+		summarizeBy: sum
+		sourceColumn: Store
+
+		annotation SummarizationSetBy = Automatic
+
+	column SKU
+		dataType: string
+		lineageTag: b2149227-0119-4b83-a926-cb137d246657
+		summarizeBy: none
+		sourceColumn: SKU
+
+		annotation SummarizationSetBy = Automatic
+
+	column Model
+		dataType: string
+		lineageTag: 6446b722-1bb7-4b38-853e-c13f8f9abf4c
+		summarizeBy: none
+		sourceColumn: Model
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesTerritoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 76c919a0-6b83-4502-acdf-bf1eac48f542
+		summarizeBy: none
+		sourceColumn: SalesTerritoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Stores = m
+		mode: import
+		source =
+				let
+				    Source = Folder.Files("C:\Users\Жулдыз\Desktop\PowerBI\Stores"),
+				    #"Filtered Hidden Files1" = Table.SelectRows(Source, each [Attributes]?[Hidden]? <> true),
+				    #"Invoke Custom Function1" = Table.AddColumn(#"Filtered Hidden Files1", "Transform File", each #"Transform File"([Content])),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Invoke Custom Function1", {"Name", "Source.Name"}),
+				    #"Removed Other Columns1" = Table.SelectColumns(#"Renamed Columns1", {"Source.Name", "Transform File"}),
+				    #"Expanded Table Column1" = Table.ExpandTableColumn(#"Removed Other Columns1", "Transform File", Table.ColumnNames(#"Transform File"(#"Sample File"))),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded Table Column1",{{"Source.Name", type text}, {"Invoice #", Int64.Type}, {"Date", type date}, {"Operation Type (purchase / relocation)", type text}, {"Product", type text}, {"Quantity", Int64.Type}, {"Cost Price", Int64.Type}, {"Total", Int64.Type}, {"Supplier", type text}, {"Store", Int64.Type}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Source.Name", "Total"}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Removed Columns",{{"Supplier", Text.Trim, type text}, {"Product", Text.Trim, type text}, {"Operation Type (purchase / relocation)", Text.Trim, type text}}),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Trimmed Text", "Product", Splitter.SplitTextByDelimiter(";", QuoteStyle.Csv), {"Product.1", "Product.2"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Product.1", type text}, {"Product.2", type text}}),
+				    #"Trimmed Text1" = Table.TransformColumns(#"Changed Type1",{{"Product.2", Text.Trim, type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Trimmed Text1",{{"Product.1", "SKU"}, {"Product.2", "Model"}}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Renamed Columns",{{"SalesTerritoryKey", Int64.Type}})
+				in
+				    #"Changed Type2"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

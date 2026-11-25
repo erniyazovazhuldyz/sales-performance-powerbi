@@ -1,0 +1,74 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "1d5e74b86cef979674df",
+  "position": {
+    "x": 1405.6479690522242,
+    "y": 0,
+    "z": 3000,
+    "height": 494,
+    "width": 466,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Product"
+                    }
+                  },
+                  "Property": "Margin Level"
+                }
+              },
+              "queryRef": "Product.Margin Level",
+              "nativeQueryRef": "Margin Level"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Product"
+                        }
+                      },
+                      "Property": "ProductKey"
+                    }
+                  },
+                  "Function": 5
+                }
+              },
+              "queryRef": "Product.ProductKey",
+              "nativeQueryRef": "Count of ProductKey"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Product"
+                  }
+                },
+                "Property": "Margin Level"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

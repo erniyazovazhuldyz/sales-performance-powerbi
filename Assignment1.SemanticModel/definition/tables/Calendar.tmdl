@@ -1,0 +1,82 @@
+table Calendar
+	lineageTag: 488a29d7-90da-428f-ae39-31f4d01f7730
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: General Date
+		lineageTag: b43db3f0-1189-456a-95b6-1a680f592323
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year = YEAR('Calendar'[Date])
+		formatString: 0
+		lineageTag: 9ada0b5f-4536-4c59-8e0c-e24ce4fe82c1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = User
+
+	column 'Month Number' = MONTH('Calendar'[Date])
+		formatString: 0
+		lineageTag: e614158d-01a8-4c12-8814-3493efc43cc7
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name' = FORMAT('Calendar'[Date], "MMMM")
+		lineageTag: 86b8cf58-c67a-49d5-81b9-bde4fcf4f392
+		summarizeBy: none
+		sortByColumn: 'Month Number'
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateKey = YEAR('Calendar'[Date]) * 10000 + MONTH('Calendar'[Date]) * 100 + DAY('Calendar'[Date])
+		formatString: 0
+		lineageTag: 691c4b2d-b49c-4b46-bd1b-5a6ea6b23d1d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Season =
+			
+			SWITCH(
+			    TRUE(),
+			    'Calendar'[Month Number] IN {3, 4, 5}, "Spring",
+			    'Calendar'[Month Number] IN {6, 7, 8}, "Summer",
+			    'Calendar'[Month Number] IN {9, 10, 11}, "Autumn",
+			    "Winter"
+			)
+		lineageTag: 8fc26305-2dbf-46c0-9688-7e84bc6db4df
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter = "Q" & QUARTER('Calendar'[Date])
+		lineageTag: 391b1ee2-7c4d-4edd-8e19-b37151c8866b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year Month' = LEFT ( 'Calendar'[Month Name], 3 ) & " " & 'Calendar'[Year]
+		lineageTag: df94f8cc-8926-4820-b8b7-f86b7d002981
+		summarizeBy: none
+		sortByColumn: 'Year Month Sort'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year Month Sort' = 'Calendar'[Year] * 100 + 'Calendar'[Month Number]
+		formatString: 0
+		lineageTag: 8662fffa-f08c-482a-87bd-89642ff525d4
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendar = calculated
+		mode: import
+		source = CALENDAR(DATE(2017,1,1), DATE(2020,12,31))
+
+	annotation PBI_Id = 1ddb70e98ede470db94604a05b60c335
+

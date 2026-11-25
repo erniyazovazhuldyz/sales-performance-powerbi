@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "cf79793418f07c9318b0",
+  "position": {
+    "x": 1405.6479690522242,
+    "y": 527.35009671179876,
+    "z": 2000,
+    "height": 471.64410058027079,
+    "width": 466.073500967118,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Customer"
+                    }
+                  },
+                  "Property": "Age Group"
+                }
+              },
+              "queryRef": "Customer.Age Group",
+              "nativeQueryRef": "Age Group"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales Measures"
+                    }
+                  },
+                  "Property": "Customer Count"
+                }
+              },
+              "queryRef": "Sales Measures.Customer Count",
+              "nativeQueryRef": "Customer Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales Measures"
+                    }
+                  },
+                  "Property": "% of Customers"
+                }
+              },
+              "queryRef": "Sales Measures.% of Customers",
+              "nativeQueryRef": "% of Customers"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

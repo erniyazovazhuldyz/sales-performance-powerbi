@@ -1,0 +1,112 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "cfbc55cbcdb93bfbc0cb",
+  "position": {
+    "x": 707.46615087040618,
+    "y": 713.036750483559,
+    "z": 10000,
+    "height": 367.65957446808511,
+    "width": 612.76595744680844,
+    "tabOrder": 10000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Territory"
+                    }
+                  },
+                  "Property": "Region"
+                }
+              },
+              "queryRef": "Territory.Region",
+              "nativeQueryRef": "Region"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales Measures"
+                    }
+                  },
+                  "Property": "Total Sales Amount"
+                }
+              },
+              "queryRef": "Sales.Total Sales Amount",
+              "nativeQueryRef": "Total Sales Amount"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales Measures"
+                    }
+                  },
+                  "Property": "Total Sales Plan"
+                }
+              },
+              "queryRef": "Sales.Total Sales Plan",
+              "nativeQueryRef": "Total Sales Plan"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales Measures"
+                    }
+                  },
+                  "Property": "Sales Plan Achievement %"
+                }
+              },
+              "queryRef": "Sales.Sales Plan Achievement %",
+              "nativeQueryRef": "Sales Plan Achievement %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Territory"
+                  }
+                },
+                "Property": "Region"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "stylePreset": [
+        {
+          "properties": {
+            "name": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Default'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

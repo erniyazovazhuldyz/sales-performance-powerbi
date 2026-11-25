@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "bf25bb60106b542e149d",
+  "displayName": "1. Sales",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "visualInteractions": [
+    {
+      "source": "d5878df6797c618908d1",
+      "target": "630a581c8814da6eadb9",
+      "type": "NoFilter"
+    },
+    {
+      "source": "b604a87bbe9339932567",
+      "target": "6ddc8d6920721ee7689d",
+      "type": "NoFilter"
+    }
+  ]
+}

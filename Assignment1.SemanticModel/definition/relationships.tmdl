@@ -1,0 +1,46 @@
+relationship AutoDetected_9c1d131a-f374-41a8-b2a2-33c3a2806b9c
+	fromColumn: Sales.ResellerKey
+	toColumn: Reseller.ResellerKey
+
+relationship AutoDetected_e2a1e325-69b8-434f-b082-aa9c59103c7a
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Sales.SalesOrderLineKey
+	toColumn: 'Sales Order'.SalesOrderLineKey
+
+relationship AutoDetected_01e9b069-cd5e-491a-a6d4-9d2f45203a78
+	fromColumn: Sales.SalesTerritoryKey
+	toColumn: Territory.SalesTerritoryKey
+
+relationship AutoDetected_93a06171-d1ae-4a5f-939e-76ba3a6c759e
+	fromColumn: 'Sales Plan Final'.SalesTerritoryKey
+	toColumn: Territory.SalesTerritoryKey
+
+relationship e5338d08-edc0-c454-98ce-41d344b67d8b
+	fromColumn: Sales.CustomerKey
+	toColumn: Customer.CustomerKey
+
+relationship AutoDetected_f59a4029-de55-4c92-bf5f-9398e839b564
+	fromColumn: Stores.SalesTerritoryKey
+	toColumn: Territory.SalesTerritoryKey
+
+relationship AutoDetected_767a23df-cc11-40a0-a4e3-066a51d10203
+	fromColumn: Sales.ProductKey
+	toColumn: Product.ProductKey
+
+relationship AutoDetected_02a614f3-6f14-4e4b-a31c-3e1382ce0977
+	fromColumn: Stores.SKU
+	toColumn: Product.SKU
+
+relationship fda25a8b-602b-6dbf-be62-ab5309a36a0a
+	fromColumn: Sales.OrderDateKey
+	toColumn: Calendar.DateKey
+
+relationship 159b4245-f142-ef55-2bfc-76d4c3cddcb8
+	fromColumn: 'Sales Plan Final'.Date
+	toColumn: Calendar.Date
+
+relationship eccb26b5-becb-a917-c66f-79975da8d4cb
+	fromColumn: Stores.Date
+	toColumn: Calendar.Date
+

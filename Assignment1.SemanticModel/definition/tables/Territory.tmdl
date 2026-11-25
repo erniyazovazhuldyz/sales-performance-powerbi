@@ -1,0 +1,55 @@
+table Territory
+	lineageTag: 16fa6e57-6d64-4eb0-ac54-6c329b371111
+
+	column SalesTerritoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: f4ca6e27-43e4-49c4-915a-fde1a95f1f52
+		summarizeBy: none
+		sourceColumn: SalesTerritoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 28e66e1a-c997-4d94-8d30-caadbdaef01a
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: bfb1748d-b9b0-4ae5-82fe-07008ea161a3
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Group
+		dataType: string
+		lineageTag: 2a32fe39-07e9-417f-a8d2-75acaf037f94
+		summarizeBy: none
+		sourceColumn: Group
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Territory = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromColumns({Lines.FromBinary(File.Contents("C:\Users\Жулдыз\Desktop\PowerBI\Sales Territory_data.txt"), null, null, 1251)}),
+				    #"Split Column by Delimiter" = Table.SplitColumn(Source, "Column1", Splitter.SplitTextByDelimiter("\", QuoteStyle.Csv), {"Column1.1", "Column1.2", "Column1.3", "Column1.4"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Column1.1", type text}, {"Column1.2", type text}, {"Column1.3", type text}, {"Column1.4", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"SalesTerritoryKey", Int64.Type}, {"Region", type text}, {"Country", type text}, {"Group", type text}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Changed Type1","",null,Replacer.ReplaceValue,{"Country"}),
+				    #"Filled Down" = Table.FillDown(#"Replaced Value",{"Country"}),
+				    #"Sorted Rows" = Table.Sort(#"Filled Down",{{"SalesTerritoryKey", Order.Ascending}})
+				in
+				    #"Sorted Rows"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
